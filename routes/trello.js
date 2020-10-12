@@ -13,10 +13,18 @@ const getCards = async () => {
   }
 
 router.get('/trello', async (req, res) => {
-    const cards = await  getCards()
+
+    try {
+      const cards = await  getCards()
+      res.send(cards.data);
+    } catch (error) {
+      res.status(500).send("Something went wrong: ", error)
+    }
+
+    
     //Gets a list of all cards from the board
 
-    res.send(cards.data);
+    
 });
 
 module.exports = router;

@@ -27,3 +27,5 @@ yarn-error.log*
 
 #scss watcher .map files
 .css.map
+#debug log
+debug.log

@@ -22,7 +22,7 @@ async function listMessages(channelID) {
 }
 
 //localhost:PORT/api/content/news
-router.get("/slack", async (req, res) => {
+router.get("/", async (req, res) => {
     try {
         const messages = await listMessages(process.env.NOUTATI_PV_CHANNEL_ID);
         res.send(messages);

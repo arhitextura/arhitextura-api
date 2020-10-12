@@ -6,11 +6,11 @@ const api = express();
 
 
 //Import routes
-const newsRoute = require('./routes/slack');
+const slackRoute = require('./routes/slack');
 const trelloRoute = require('./routes/trello')
 //Routes Middlewares
-api.use('/api/content', newsRoute);
-api.use('/api/content', trelloRoute)
+api.use('/slack', slackRoute);
+api.use('/trello', trelloRoute)
 
 
 

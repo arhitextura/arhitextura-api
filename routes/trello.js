@@ -58,6 +58,8 @@ router.get("/cards", async (req, res, next) => {
 router.get("/lists", async (req, res, next) => {
   try {
     const cards = await getLists();
+    res.header("Access-Control-Allow-Origin", "*");
+    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
     res.status(200).send(cards.data);
   } catch (error) {
     next(error);
@@ -68,6 +70,7 @@ router.get(`/cards/:id`, async (req, res, next) => {
   axios.get(
     `https://api.trello.com/1/lists/${req.params.id}/cards?key=${process.env.TRELLO_KEY}&token=${process.env.TRELLO_TOKEN}`
   ).then(response=>{
+    
     res.send(response.data)
   }).catch(err=>{
     if (err.response) {

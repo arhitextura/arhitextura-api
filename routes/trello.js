@@ -5,9 +5,9 @@ const trello = require("./trello_GET_functions.js");
 
 require("dotenv").config();
 
-//Get all lists in the board
 
 
+//get all cards on the board
 router.get("/cards", async (req, res, next) => {
   const resp = trello.getAllCardsOnBoard()
   resp.then(data=> {
@@ -18,6 +18,7 @@ router.get("/cards", async (req, res, next) => {
   })
 });
 
+//Get all lists in the board
 router.get("/lists", async (req, res, next) => {
   const resp = trello.getAllListsOnBoard()
   resp.then(data=> {
@@ -28,6 +29,7 @@ router.get("/lists", async (req, res, next) => {
   })
 });
 
+//Get all cards on a specified list
 router.get(`/cards/:id`, async (req, res, next) => {
   const resp = trello.getCardsOnList(req.params.id)
   resp.then(data=> {

@@ -1,85 +1,43 @@
 const router = require("express").Router();
 const axios = require("axios");
-const { request } = require("express");
+const {ERRORS_TYPE} = require('../constants/ERROR');
+const trello = require("./trello_GET_functions.js");
 
 require("dotenv").config();
-//Get all cards in the board
-const getCards = async () => {
-  try {
-    return await axios.get(
-      `https://api.trello.com/1/boards/${process.env.BOARD_ID}/cards?key=${process.env.TRELLO_KEY}&token=${process.env.TRELLO_TOKEN}`
-    );
-  } catch (error) {
-    console.error(error);
-  }
-};
-//Get all lists in the board
-const getLists = async () => {
-  try {
-    return await axios.get(
-      `https://api.trello.com/1/boards/${process.env.BOARD_ID}/lists?key=${process.env.TRELLO_KEY}&token=${process.env.TRELLO_TOKEN}`
-    );
-  } catch (error) {
-    console.error(error);
-  }
-};
 
-//Get cards on a specific list ID
-const getCardsByListId = async (id) => {
-  
-   axios.get(
-      `https://api.trello.com/1/lists/${id}/cards?key=${process.env.TRELLO_KEY}&token=${process.env.TRELLO_TOKEN}`
-    ).then(response=>{
-      return response
-    }).catch(err=>{
-      if (err.response) {
-        // client received an error response (5xx, 4xx)
-        return new Error("Status:", err.response.status)
-      } else if (err.request) {
-        // client never received a response, or request never left
-        return new Error("Status:", err.request)
-      } else {
-        // anything else
-        return "Something went wrong"
-      }
-    });
-  
-  };
+//Get all lists in the board
+
 
 router.get("/cards", async (req, res, next) => {
-  try {
-    const cards = await getCards();
-    res.status(200).send(cards.data);
-  } catch (error) {
-    next(error);
-  }
+  const resp = trello.getAllCardsOnBoard()
+  resp.then(data=> {
+    res.send(data)
+    return data
+  }).catch(error=>{
+    res.status(error.message).send("Error " + error.message + " " + ERRORS_TYPE[error.message].message)
+  })
 });
 
 router.get("/lists", async (req, res, next) => {
-  try {
-    const cards = await getLists();
-    res.header("Access-Control-Allow-Origin", "*");
-    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
-    res.status(200).send(cards.data);
-  } catch (error) {
-    next(error);
-  }
+  const resp = trello.getAllListsOnBoard()
+  resp.then(data=> {
+    res.send(data)
+    return data
+  }).catch(error=>{
+    res.status(error.message).send("Error " + error.message + " " + ERRORS_TYPE[error.message].message)
+  })
 });
 
 router.get(`/cards/:id`, async (req, res, next) => {
-  axios.get(
-    `https://api.trello.com/1/lists/${req.params.id}/cards?key=${process.env.TRELLO_KEY}&token=${process.env.TRELLO_TOKEN}`
-  ).then(response=>{
-    
-    res.send(response.data)
-  }).catch(err=>{
-    if (err.response) {
-      // client received an error response (5xx, 4xx)
-      next("Error:" + err.response.status)
-    } else {
-      next("Something went wrong")      
-    }
-  });
+  const resp = trello.getCardsOnList(req.params.id)
+  resp.then(data=> {
+    res.send(data)
+    return data
+  }).catch(error=>{
+    res.status(error.message).send("Error " + error.message + " " + ERRORS_TYPE[error.message].message)
+  })
 });
+
+
 
 module.exports = router;

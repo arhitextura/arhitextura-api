@@ -1,5 +1,11 @@
+
 const axios = require("axios");
 
+/**
+ * @param {Promise} _request - Must be a Promise, so it will handle the request. 
+ * @returns {JSON} Returns a JSON data or an Error
+ * @returns {Error} If something goes wrong it will return an error message.
+ */
 function _errorHandler(_request) {
   if (_request instanceof Promise) {
     return _request
@@ -17,10 +23,14 @@ function _errorHandler(_request) {
         }
       });
   } else {
-    throw new Error ("_request must a Promise type in _errorHandler function()")
+    throw new Error("_request must a Promise type in _errorHandler function()")
   }
 }
 
+/**
+ * Fetches all lists on trello board, BOARD_ID is set in NODE_ENV
+ * @returns {_errorHandler} Return a JSON Data if no errors trough _errorHadler(_request) function
+ */
 async function getAllListsOnBoard() {
   const request = axios.get(
     `https://api.trello.com/1/boards/${process.env.BOARD_ID}/lists?key=${process.env.TRELLO_KEY}&token=${process.env.TRELLO_TOKEN}`
@@ -28,6 +38,10 @@ async function getAllListsOnBoard() {
   return _errorHandler(request);
 }
 
+/**
+ * Fetches all cards on trello board, BOARD_ID is set in NODE_ENV
+ * @returns {_errorHandler} Return a JSON Data if no errors trough _errorHadler(_request) function
+ */
 async function getAllCardsOnBoard() {
   const request = axios.get(
     `https://api.trello.com/1/boards/${process.env.BOARD_ID}/cards?key=${process.env.TRELLO_KEY}&token=${process.env.TRELLO_TOKEN}`
@@ -35,6 +49,12 @@ async function getAllCardsOnBoard() {
   return _errorHandler(request);
 }
 
+/**
+ * Fetches all cards on trello board, BOARD_ID is set in NODE_ENV
+ * @param {String} id - Must specify the ID, else it will send an error message trough _errorHandler
+ * @returns {_errorHandler} Return a JSON Data if no errors trough _errorHadler(_request) function
+ * @example getCardsOnList("5f832e55f393771fb23c1cb9")
+ */
 async function getCardsOnList(id) {
   const request = axios.get(
     `https://api.trello.com/1/lists/${id}/cards?key=${process.env.TRELLO_KEY}&token=${process.env.TRELLO_TOKEN}`

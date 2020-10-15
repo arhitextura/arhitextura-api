@@ -65,4 +65,24 @@ router.get(`/list/:id/cards`, async (req, res) => {
     });
 });
 
+/**
+ * Get all cards that are on a list specified by ID
+ * @example https://api.arhitextura.ro/trello/list/<#someId>/cards
+ */
+router.get(`/checklist/:id`, async (req, res) => {
+  const resp = trello.getCheckListByID(req.params.id);
+  resp
+    .then((data) => {
+      res.send(data);
+      return data;
+    })
+    .catch((error) => {
+      res
+        .status(error.message)
+        .send(
+          "Error " + error.message + " " + ERRORS_TYPE[error.message].message
+        );
+    });
+});
+
 module.exports = router;

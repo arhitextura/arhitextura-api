@@ -62,6 +62,14 @@ async function getCardsOnList(id) {
   return _errorHandler(request);
 }
 
+async function getCheckListByID(id) {
+  const request = axios.get(
+    `https://api.trello.com/1/checklists/${id}?key=${process.env.TRELLO_KEY}&token=${process.env.TRELLO_TOKEN}`
+  );
+  return _errorHandler(request);
+}
+
 module.exports.getCardsOnList = getCardsOnList;
 module.exports.getAllCardsOnBoard = getAllCardsOnBoard;
 module.exports.getAllListsOnBoard = getAllListsOnBoard;
+module.exports.getCheckListByID = getCheckListByID;
